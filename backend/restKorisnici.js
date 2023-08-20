@@ -1,12 +1,20 @@
-const KorisnikDAO = require("./DAO/korisnikDAO");
+const korisniciDAO = require("./DAO/korisniciDAO");
 
 exports.prijava = function (zahtjev, odgovor) {
-    odgovor.json({ poruka: 'Uspješna prijava.' });
+    const kdao = new korisniciDAO();
+    let korisnik = zahtjev.body;
+    kdao.prijava(korisnik).then((poruka) => {
+        odgovor.send(JSON.stringify(poruka));
+    });
 }
 
 exports.registracija = function (zahtjev, odgovor) {
-    odgovor.json({ poruka: 'Uspješna prijava.' });
-    
+    const kdao = new korisniciDAO();
+    let korisnik = zahtjev.body;
+    kdao.registracija(korisnik).then((poruka) => {
+        odgovor.send(JSON.stringify(poruka));
+    });
+ 
 }
 
 exports.korisnik = function (zahtjev, odgovor) {
