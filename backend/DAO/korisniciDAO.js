@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-
 const baza = require('./baza.js');
 
 const KorisnikSchema = new mongoose.Schema({
