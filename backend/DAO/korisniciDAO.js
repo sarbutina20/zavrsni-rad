@@ -1,66 +1,59 @@
-const mongoose = require('mongoose');
+const { ObjectId } = require("mongodb");
+const Baza = require("./baza.js");
 const bcrypt = require('bcrypt');
-const baza = require('./baza.js');
 
-const KorisnikSchema = new mongoose.Schema({
-  KorisnickoIme: String,
-  Lozinka: String,
-  Email: String,
-  Uloga_ID: mongoose.Schema.Types.ObjectId,
-});
+class KorisniciDAO {
+    constructor() {
+        this.baza = new Baza();
+    }
 
-const Korisnik = mongoose.model('Korisnik', KorisnikSchema);
+    async prijava(korisnik) {
+      try {
+          const db = await this.baza.poveziSeNaBazu();
+          const baza = db.database;
 
-class KorisnikDAO {
-  constructor() {}
 
-  prijava = async function (korisnik) {
-    const db = await baza.poveziSeNaBazu();
+          const korisniciKolekcija = baza.collection('korisnici');
+          console.log(korisniciKolekcija);
 
-    try {
-      const dohvaceniKorisnik = await Korisnik.findOne({
-        KorisnickoIme: korisnik.KorisnickoIme,
-      });
 
-      if (!dohvaceniKorisnik) {
-        throw new Error('Korisnik ne postoji');
+  
+          const dohvaceniKorisnik = await korisniciKolekcija.findOne({ KorisnickoIme: korisnik.KorisnickoIme });
+          
+          if (!dohvaceniKorisnik) {
+              console.log("NEma ga")
+          }
+  
+          const lozinkaUsporedba = await bcrypt.compare(korisnik.Lozinka, dohvaceniKorisnik.Lozinka);
+  
+          db.prekiniVezu();
+          return lozinkaUsporedba;
+
+      } catch (error) {
+          console.error('Greška pri prijavi:', error);
+          throw error;
       }
+  }
+  
 
-      const lozinkaUsporedba = await bcrypt.compare(
-        korisnik.Lozinka,
-        dohvaceniKorisnik.Lozinka
-      );
+    async registracija(noviKorisnik) {
+        const db = await this.baza.poveziSeNaBazu();
+        const korisniciKolekcija = db.database.collection('korisnici');
 
-      return lozinkaUsporedba;
-    } catch (error) {
-      throw error;
-    } finally {
-      db.prekiniVezu();
+        const hashiranaLozinka = await bcrypt.hash(noviKorisnik.Lozinka, 12);
+
+        const noviKorisnikObjekt = {
+            Korisnicko_Ime: noviKorisnik.Korisnicko_Ime,
+            Lozinka: hashiranaLozinka,
+            Email: noviKorisnik.Email,
+            Uloga_ID: ObjectId("64e22057f9497eba62ed9513")
+        };
+
+        const povratneInfo = await korisniciKolekcija.insertOne(noviKorisnikObjekt);
+        db.prekiniVezu();
+
+        return povratneInfo.result.ok;
     }
-  };
-
-  registracija = async function (noviKorisnik) {
-    const db = await baza.poveziSeNaBazu();
-
-    try {
-      const hashiranaLozinka = await bcrypt.hash(noviKorisnik.Lozinka, 12);
-
-      const noviKorisnikObjekt = new Korisnik({
-        KorisnickoIme: noviKorisnik.Korisnicko_Ime,
-        Lozinka: hashiranaLozinka,
-        Email: noviKorisnik.Email,
-        Uloga_ID: mongoose.Types.ObjectId('64e22057f9497eba62ed9513'),
-      });
-
-      await noviKorisnikObjekt.save();
-
-      return true;
-    } catch (error) {
-      throw error;
-    } finally {
-      db.prekiniVezu();
-    }
-  };
 }
 
-module.exports = KorisnikDAO;
+module.exports = KorisniciDAO;

@@ -1,15 +1,14 @@
 require('dotenv').config();
 const express = require('express');
-const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser')
 const cors = require('cors');
 const restKorisnici = require("./restKorisnici.js")
 const restKnjige = require("./restKnjige.js")
 const konfiguracija = require('./konfiguracija.json');
+const { MongoClient } = require('mongodb');
 
 const app = express();
 const port = konfiguracija.port;
-
 
 function pokreniServer() {
     app.use(express.urlencoded({ extended: true }));
@@ -22,10 +21,11 @@ function pokreniServer() {
         let poruka = { greska: "Stranica nije pronađena!" }
         odgovor.json(poruka);
     });
-    console.log(process.env.MONGODB);
+    
     app.listen(port, () => {
         console.log(`Server pokrenut na portu: ${port}`);
     });
+
 }
 
 const pripremaPutanja = () => {
