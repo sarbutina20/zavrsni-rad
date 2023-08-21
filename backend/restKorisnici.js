@@ -3,17 +3,37 @@ const korisniciDAO = require("./DAO/korisniciDAO");
 exports.prijava = function (zahtjev, odgovor) {
     const kdao = new korisniciDAO();
     let korisnik = zahtjev.body;
-    kdao.prijava(korisnik).then((poruka) => {
-        odgovor.send(JSON.stringify(poruka));
-    });
+    try {
+        kdao.prijava(korisnik).then((poruka) => {
+            if(poruka.error) {
+                odgovor.status(400).json({error:poruka.error})
+            }
+            else {
+                odgovor.status(200).json({ token: poruka.token });
+            }
+        });
+    } catch (serverError) {
+        odgovor.status(500).json({error:serverError})
+    }
+    
 }
 
 exports.registracija = function (zahtjev, odgovor) {
     const kdao = new korisniciDAO();
     let korisnik = zahtjev.body;
-    kdao.registracija(korisnik).then((poruka) => {
-        odgovor.send(JSON.stringify(poruka));
-    });
+
+    try {
+        kdao.registracija(korisnik).then((poruka) => {
+            if(poruka.error) {
+                odgovor.status(400).json({error:poruka.error})
+            }
+            else {
+                odgovor.sendStatus(200);
+            }
+        });
+    } catch (serverError) {
+        odgovor.status(500).json({error:serverError})
+    }
  
 }
 

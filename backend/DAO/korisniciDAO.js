@@ -1,7 +1,8 @@
 const { ObjectId } = require("mongodb");
 const Baza = require("./baza.js");
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const jwt = require("../jwt.js")
+
 
 class KorisniciDAO {
     constructor() {
@@ -27,18 +28,11 @@ class KorisniciDAO {
           if(lozinkaUsporedba) {
 
             const uloga = await ulogeKolekcija.findOne({ _id: dohvaceniKorisnik.Uloga_ID });
-            
-            const payload = {
-                KorisnickoIme: korisnik.KorisnickoIme,
-                Uloga: uloga.Naziv 
-            };
-        
-            const tajniKljuc = process.env.JWT;
-            const token = jwt.sign(payload, tajniKljuc, { expiresIn: '1h' });
-            
 
+            const token = await jwt.kreirajToken({KorisnickoIme:korisnik.KorisnickoIme, Uloga: uloga.Naziv})
+            
             db.prekiniVezu();
-            return { token };
+            return { token:token };
 
 
           } else {

@@ -6,6 +6,7 @@ const restKorisnici = require("./restKorisnici.js")
 const restKnjige = require("./restKnjige.js")
 const konfiguracija = require('./konfiguracija.json');
 const { MongoClient } = require('mongodb');
+const jwt = require("./jwt.js")
 
 const app = express();
 const port = konfiguracija.port;
@@ -32,7 +33,7 @@ const pripremaPutanja = () => {
     
     app.post("/api/prijava",restKorisnici.prijava);
     app.post("/api/registracija",restKorisnici.registracija);
-    app.get("/api/korisnici/:id",restKorisnici.korisnik);
+    app.get("/api/korisnici/:id", jwt.verificirajToken, restKorisnici.korisnik);
 
     app.get("/api/proizvodi",restKnjige.proizvodi);
     app.get("/api/narudzba",restKnjige.narudzbe);
