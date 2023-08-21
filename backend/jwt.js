@@ -5,7 +5,8 @@ exports.kreirajToken = async function (korisnik) {
 
     const payload = {
         KorisnickoIme: korisnik.KorisnickoIme,
-        Uloga: korisnik.Uloga 
+        Uloga: korisnik.Uloga,
+        _id: korisnik._id
     };
 
     const tajniKljuc = process.env.JWT;

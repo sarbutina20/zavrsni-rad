@@ -29,7 +29,7 @@ class KorisniciDAO {
 
             const uloga = await ulogeKolekcija.findOne({ _id: dohvaceniKorisnik.Uloga_ID });
 
-            const token = await jwt.kreirajToken({KorisnickoIme:korisnik.KorisnickoIme, Uloga: uloga.Naziv})
+            const token = await jwt.kreirajToken({korisnik:dohvaceniKorisnik})
             
             db.prekiniVezu();
             return { token:token };
@@ -52,7 +52,7 @@ class KorisniciDAO {
         const db = await this.baza.poveziSeNaBazu();
         const korisniciKolekcija = db.database.collection('korisnici');
         const hashiranaLozinka = await bcrypt.hash(noviKorisnik.Lozinka, 12);
-        let povratneInfo = null;
+        
         try {
             const noviKorisnikObjekt = {
                 KorisnickoIme: noviKorisnik.KorisnickoIme,
@@ -60,8 +60,11 @@ class KorisniciDAO {
                 Email: noviKorisnik.Email,
                 Uloga_ID: new ObjectId("64e22057f9497eba62ed9513")
             };
-            povratneInfo = await korisniciKolekcija.insertOne(noviKorisnikObjekt);
+            const povratneInfo = await korisniciKolekcija.insertOne(noviKorisnikObjekt);
+            db.prekiniVezu()
             console.log("Korisnik uspješno unesen")
+            return povratneInfo;
+            
         } catch (error) {
             db.prekiniVezu()
             if (error.code === 11000) {
@@ -73,7 +76,7 @@ class KorisniciDAO {
             }
             
         }
-        db.prekiniVezu()
+        
         if(povratneInfo) return true;
     }
 

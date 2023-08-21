@@ -33,11 +33,15 @@ const pripremaPutanja = () => {
     
     app.post("/api/prijava",restKorisnici.prijava);
     app.post("/api/registracija",restKorisnici.registracija);
+
     app.get("/api/korisnici/:id", jwt.verificirajToken, restKorisnici.korisnik);
 
-    app.get("/api/proizvodi",restKnjige.proizvodi);
-    app.get("/api/narudzba",restKnjige.narudzbe);
-    app.post("/api/narudzba",restKnjige.narudzbe);
+    app.get("/api/knjige", jwt.verificirajToken, restKnjige.knjige);
+
+    app.get("/api/bazaKnjige",jwt.verificirajToken, restKnjige.bazaKnjige);
+
+    app.get("/api/narudzbe", jwt.verificirajToken, restKnjige.narudzbe);
+    app.post("/api/narudzbe", jwt.verificirajToken,restKnjige.narudzbe);
 }
 
 
