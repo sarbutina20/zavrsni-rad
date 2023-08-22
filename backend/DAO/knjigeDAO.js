@@ -35,10 +35,12 @@ class KnjigeDAO {
       knjige.map(async (knjiga) => {
         const coverId = knjiga.coverId;
         const slikaUrl = `https://covers.openlibrary.org/b/id/${coverId}-L.jpg`;
+        const generiranaCijena = Math.floor(Math.random() * (50 - 7 + 1)) + 7;
 
         return {
           naslov: knjiga.naslov,
           coverId: knjiga.coverId,
+          cijena: parseFloat(generiranaCijena),
           slikaUrl: slikaUrl,
         };
       })
