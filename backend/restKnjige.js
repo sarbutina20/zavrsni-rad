@@ -2,21 +2,22 @@ const KnjigeDAO = require("./DAO/knjigeDAO");
 
 exports.knjige = async function (zahtjev, odgovor) {
     const kdao = new KnjigeDAO();
-    let nazivKategorije = zahtjev.body.naziv;
+    //let nazivKategorije = zahtjev.query.naziv;
     
     try {
-        const poruka = await kdao.knjige(nazivKategorije);
+        const poruka = await kdao.knjige_NYT();
         if (poruka.error) {
             odgovor.status(400).json({ error: poruka.error });
         } else {
-            const knjigeSaSlikama = await kdao.dohvatiSlike(poruka.knjige);
-            console.log(knjigeSaSlikama);
-            odgovor.status(200).json({ knjige: knjigeSaSlikama });
+            //const knjigeSaSlikama = await kdao.dohvatiSlike(poruka.knjige);
+            odgovor.status(200).json({ knjige: poruka.knjige });
         }
     } catch (serverError) {
         odgovor.status(500).json({ error: serverError });
     }
 }
+
+
 
 
 exports.bazaKnjige = function (zahtjev, odgovor) {

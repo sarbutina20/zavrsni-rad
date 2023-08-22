@@ -4,6 +4,7 @@ const cors = require('cors');
 const konfiguracija = require('./konfiguracija.json');
 
 const app = express();
+app.use(cors());
 
 const port = konfiguracija.port || 5000;
 

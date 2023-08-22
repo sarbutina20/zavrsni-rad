@@ -1,0 +1,46 @@
+@font-face {
+    font-family: 'LatoRegular';
+    src: url('../../fonts/Lato-Regular.ttf') format('ttf');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: 'LatoBold';
+    src: url('../../fonts/Lato-Bold.ttf') format('ttf');
+    font-weight: bold;
+    font-style: normal;
+  }
+  
+
+.navTraka  {
+  list-style-type: none;
+  display: flex;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-top: 10px;
+  margin-left: 30px;
+  background-color: #333;
+}
+
+.navElement {
+  margin-right: 20px;
+}
+
+.navLink {
+  text-decoration: none;
+  color: white;
+  padding: 10px;
+  transition: background-color 0.3s;
+  font-family: 'LatoRegular', sans-serif;
+  font-weight: normal;
+  letter-spacing: 0.1em;
+}
+
+.navLink:hover {
+  background-color: #555;
+  font-family: 'LatoBold', sans-serif;
+  font-weight: bold;
+  text-decoration: underline;
+  text-underline-offset: 10px;
+}

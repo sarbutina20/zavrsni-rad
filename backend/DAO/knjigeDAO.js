@@ -41,12 +41,31 @@ class KnjigeDAO {
           naslov: knjiga.naslov,
           coverId: knjiga.coverId,
           cijena: parseFloat(generiranaCijena),
-          slikaUrl: slikaUrl,
+          slikaURL: slikaUrl,
         };
       })
     );
 
     return knjigeSaSlikama;
+  }
+
+  async knjige_NYT() {
+
+    const kljuc = process.env.NYT
+    const odgovor = await fetch(`https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json?api-key=${kljuc}`)
+
+    if (!odgovor.ok) {
+      return { error: "Neispravan zahtjev" };
+    }
+
+    const podaci = await odgovor.json();
+    const knjige = podaci.results.books.map((knjiga) => ({
+      naslov: knjiga.title,
+      desc: knjiga.description,
+      slika: knjiga.book_image
+    }));
+
+    return { knjige };
   }
 
   async knjige(nazivKategorije) {
