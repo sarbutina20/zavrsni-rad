@@ -1,12 +1,13 @@
 import { Form, redirect } from "react-router-dom";
+import styles from "./autentifikacija.module.css"
 
 export const Prijava = () => {
   return (
-    <Form method="post">
-      <label htmlFor="username">Korisničko ime: </label>
+    <Form method="post" className={styles.loginForm}>
+      <label htmlFor="username">Korisničko ime </label>
       <input name="username" id="username" autoComplete="off" required></input>
       <br></br>
-      <label htmlFor="password">Lozinka: </label>
+      <label htmlFor="password">Lozinka </label>
       <input
         name="password"
         id="password"
@@ -36,21 +37,20 @@ export const actionPrijava = async ({ request }) => {
     });
 
     if (!odgovor.ok) {
-        const errorPoruka = odgovor.json()
-      throw new Error(errorPoruka);
+        const errorPoruka = await odgovor.json()
+      throw new Error(errorPoruka.error);
     }
 
     const vraceniToken = await odgovor.json();
     const token = vraceniToken.token
 
     const expirationDate = new Date();
-    expirationDate.setHours(expirationDate.getHours() + 1);
-
+    //expirationDate.setHours(expirationDate.getHours() + 1);
+    expirationDate.setTime(expirationDate.getTime() + 30000);
     document.cookie = `token=${token}; expires=${expirationDate.toUTCString()}; path=/;`;
     
     return redirect("/");
   } catch (error) {
-    console.error(error);
-    throw new Error("Prijava nije uspjela");
+    throw new Error(error.message);
   }
 };

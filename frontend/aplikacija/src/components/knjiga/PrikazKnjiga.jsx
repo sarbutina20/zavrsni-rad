@@ -1,6 +1,7 @@
 import { useLoaderData } from "react-router-dom";
 import Knjiga from "./knjiga";
 import styles from "../knjiga/knjiga.module.css"
+import {dohvatiToken} from "../autentifikacija/token"
 
 
 export const PrikazKnjiga = () => {
@@ -19,9 +20,11 @@ export const PrikazKnjiga = () => {
 
 export async function loaderKnjige() {
   try {
-    //const nazivKategorije = "non-fiction";
-    const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2OTI3MzUwODksImV4cCI6MTY5MjczODY4OX0.R_oTt8clvMAU3MGZE2kx0fPSntbCFw9T5cWkC33i724";
+    /*const token = dohvatiToken();
+    if(!token) {
+      throw new Error("Morate biti prijavljeni kako bi pristupili resursu")
+    } */
+    
     const odgovor = await fetch(
       `http://localhost:5000/api/knjige`,
       {
@@ -32,14 +35,12 @@ export async function loaderKnjige() {
     );
 
     if (!odgovor.ok) {
-      console.error(odgovor.error);
       throw new Error(odgovor.error);
     }
 
     const podaci = odgovor.json();
     return podaci;
   } catch (error) {
-    console.error(error);
-    throw new Error(error);
+    throw new Error(error.message);
   }
 }
