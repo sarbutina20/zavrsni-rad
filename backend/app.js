@@ -36,7 +36,7 @@ const pripremaPutanja = () => {
 
     app.get("/api/korisnici/:id", jwt.verificirajToken, restKorisnici.korisnik);
 
-    app.get("/api/knjige", restKnjige.knjige);
+    app.get("/api/knjige", jwt.verificirajToken, restKnjige.knjige);
 
     app.get("/api/bazaKnjige",jwt.verificirajToken, restKnjige.bazaKnjige);
 

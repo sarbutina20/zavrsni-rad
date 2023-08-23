@@ -14,6 +14,16 @@ const Navigacija = () => {
           Knjige
         </NavLink>
       </li>
+      <li className={styles.navElement}>
+        <NavLink to="/prijava" className={styles.navLink}>
+          Prijava
+        </NavLink>
+      </li>
+      <li className={styles.navElement}>
+        <NavLink to="/registracija" className={styles.navLink}>
+          Registracija
+        </NavLink>
+      </li>
     </ul>
   );
 };

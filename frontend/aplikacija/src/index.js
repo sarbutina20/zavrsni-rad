@@ -5,7 +5,8 @@ import App from "./App";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorPage from "./routes/ErrorPage";
 import MainLayout from "./routes/MainLayout";
-import { Knjige, loaderKnjige } from "./components/knjige/knjige";
+import { loaderKnjige, PrikazKnjiga } from "./components/knjiga/PrikazKnjiga";
+import { actionPrijava, Prijava } from "./components/prijava i registracija/Prijava";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -17,10 +18,15 @@ const router = createBrowserRouter([
         element: <App></App>,
       },
       {
-        path: "knjige",
-        element: <Knjige></Knjige>,
-        loader: loaderKnjige,
+        path: "prijava",
+        element: <Prijava></Prijava>,
+        action: actionPrijava,
       },
+      {
+        path: "knjige",
+        element: <PrikazKnjiga></PrikazKnjiga>,
+        loader: loaderKnjige,
+      }
     ],
   },
 ]);

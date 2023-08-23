@@ -1,20 +1,17 @@
 import { useLoaderData } from "react-router-dom";
+import Knjiga from "./knjiga";
+import styles from "../knjiga/knjiga.module.css"
 
-export const Knjige = () => {
+
+export const PrikazKnjiga = () => {
   const dohvaceneKnjige = useLoaderData();
 
-console.log("IZVODI SE")
   return (
-    <div>
-      <h1>Na stranici knjige si!</h1>
-      <ul>
+    <div className={styles.knjigeContainer}>
+      
       {dohvaceneKnjige.knjige.map((knjiga) => (
-        <li key={knjiga.slika}>
-            <h3>{knjiga.naslov}</h3>
-            <img alt={knjiga.naslov} src={knjiga.slika}></img>
-        </li>
+        <Knjiga key={knjiga.slika} knjiga={knjiga}></Knjiga>
       ))}
-      </ul>
       
     </div>
   );
@@ -22,7 +19,7 @@ console.log("IZVODI SE")
 
 export async function loaderKnjige() {
   try {
-    const nazivKategorije = "non-fiction";
+    //const nazivKategorije = "non-fiction";
     const token =
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2OTI3MzUwODksImV4cCI6MTY5MjczODY4OX0.R_oTt8clvMAU3MGZE2kx0fPSntbCFw9T5cWkC33i724";
     const odgovor = await fetch(

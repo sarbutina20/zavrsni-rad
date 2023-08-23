@@ -2,6 +2,7 @@ const korisniciDAO = require("./DAO/korisniciDAO");
 
 exports.prijava = function (zahtjev, odgovor) {
     const kdao = new korisniciDAO();
+    console.log("TU SAMMM")
     let korisnik = zahtjev.body;
     try {
         kdao.prijava(korisnik).then((poruka) => {
