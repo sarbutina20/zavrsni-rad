@@ -2,7 +2,6 @@ const korisniciDAO = require("./DAO/korisniciDAO");
 
 exports.prijava = function (zahtjev, odgovor) {
     const kdao = new korisniciDAO();
-    console.log("TU SAMMM")
     let korisnik = zahtjev.body;
     try {
         kdao.prijava(korisnik).then((poruka) => {
@@ -10,7 +9,8 @@ exports.prijava = function (zahtjev, odgovor) {
                 odgovor.status(400).json({error:poruka.error})
             }
             else {
-                odgovor.status(200).json({ token: poruka.token });
+                console.log(poruka.kosarica)
+                odgovor.status(200).json({ token: poruka.token, kosarica: poruka.kosarica });
             }
         });
     } catch (serverError) {

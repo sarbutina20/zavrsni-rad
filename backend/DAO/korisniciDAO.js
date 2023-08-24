@@ -14,6 +14,7 @@ class KorisniciDAO {
       const baza = db.database;
       const korisniciKolekcija = baza.collection("korisnici");
       const ulogeKolekcija = baza.collection("uloge");
+      const kosaricaKolekcija = baza.collection("kosarica")
 
       const dohvaceniKorisnik = await korisniciKolekcija.findOne({
         KorisnickoIme: korisnik.KorisnickoIme,
@@ -34,6 +35,10 @@ class KorisniciDAO {
         const uloga = await ulogeKolekcija.findOne({
           _id: dohvaceniKorisnik.Uloga_ID,
         });
+
+        const kosarica = await kosaricaKolekcija.findOne({
+          Korisnik_ID: korisnik._id,
+        });
         
         const token = await jwt.kreirajToken({
           korisnik: dohvaceniKorisnik,
@@ -42,7 +47,7 @@ class KorisniciDAO {
         });
         
         db.prekiniVezu();
-        return { token: token };
+        return { token, kosarica };
       } else {
         db.prekiniVezu();
         return { error: "Neispravna lozinka." };

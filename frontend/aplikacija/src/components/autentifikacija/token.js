@@ -16,3 +16,9 @@ export function actionZastita() {
     if(token) return token;
     else return redirect('/');
 }
+
+export function loaderAutentifikacija() {
+    const token = dohvatiToken()
+    if(token) return redirect('/')
+    else return null;
+}

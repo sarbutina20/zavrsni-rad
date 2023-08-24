@@ -1,5 +1,7 @@
 const Baza = require("./baza.js");
 const { ObjectId } = require("mongodb");
+const crypto = require('crypto');
+
 
 class KnjigeDAO {
   constructor() {
@@ -15,14 +17,14 @@ class KnjigeDAO {
     const trenutniDatum = new Date();
     const novaNarudzba = {
       stavke: narudzba.stavke,
-      ukupnaCijena: narudzba.ukupnaCijena,
+      ukupnaCijenaStavki: narudzba.ukupnaCijenaStavki,
       datum: trenutniDatum.toISOString(),
       Korisnik_ID: new ObjectId(korisnik._id),
     };
     try {
       const povratneInfo = await kolekcijaNarudzbi.insertOne(novaNarudzba);
       db.prekiniVezu();
-      console.log("Korisnik uspješno unesen");
+      console.log("Narudžba uspješno unesena");
       return povratneInfo;
     } catch (error) {
       console.error("Greška pri dodavanju narudžbe u bazu:", error);
@@ -50,20 +52,29 @@ class KnjigeDAO {
   }
 
   async knjige_NYT() {
-
-    const kljuc = process.env.NYT
-    const odgovor = await fetch(`https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json?api-key=${kljuc}`)
+    const kljuc = process.env.NYT;
+    const odgovor = await fetch(
+      `https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json?api-key=${kljuc}`
+    );
 
     if (!odgovor.ok) {
       return { error: "Neispravan zahtjev" };
     }
-
     const podaci = await odgovor.json();
-    const knjige = podaci.results.books.map((knjiga) => ({
-      naslov: knjiga.title,
-      desc: knjiga.description,
-      slika: knjiga.book_image
-    }));
+
+    const knjige = podaci.results.books.map((knjiga) => {
+      const hash = crypto.createHash('md5').update(`${knjiga.title}${knjiga.author}${knjiga.primary_isbn13}`).digest('hex');
+    const generiranaCijena = (parseInt(hash, 16) % 44) + 7;
+
+      return {
+        isbn: knjiga.primary_isbn13,
+        autor: knjiga.author,
+        naslov: knjiga.title,
+        opis: knjiga.description,
+        slika: knjiga.book_image,
+        cijena: generiranaCijena
+      };
+    });
 
     return { knjige };
   }

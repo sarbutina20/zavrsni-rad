@@ -11,7 +11,7 @@ export const PrikazKnjiga = () => {
     <div className={styles.knjigeContainer}>
       
       {dohvaceneKnjige.knjige.map((knjiga) => (
-        <Knjiga key={knjiga.slika} knjiga={knjiga}></Knjiga>
+        <Knjiga key={knjiga.isbn} knjiga={knjiga}></Knjiga>
       ))}
       
     </div>
@@ -20,22 +20,23 @@ export const PrikazKnjiga = () => {
 
 export async function loaderKnjige() {
   try {
-    /*const token = dohvatiToken();
+    const token = dohvatiToken();
     if(!token) {
       throw new Error("Morate biti prijavljeni kako bi pristupili resursu")
-    } */
+    }
     
     const odgovor = await fetch(
       `http://localhost:5000/api/knjige`,
       {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: token
         },
       }
     );
 
     if (!odgovor.ok) {
-      throw new Error(odgovor.error);
+      const errorMessage = await odgovor.json()
+      throw new Error(errorMessage.error);
     }
 
     const podaci = odgovor.json();
