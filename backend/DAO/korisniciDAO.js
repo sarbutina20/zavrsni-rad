@@ -35,10 +35,11 @@ class KorisniciDAO {
         const uloga = await ulogeKolekcija.findOne({
           _id: dohvaceniKorisnik.Uloga_ID,
         });
-
+        
         const kosarica = await kosaricaKolekcija.findOne({
-          Korisnik_ID: korisnik._id,
+          Korisnik_ID: dohvaceniKorisnik._id,
         });
+        
         
         const token = await jwt.kreirajToken({
           korisnik: dohvaceniKorisnik,

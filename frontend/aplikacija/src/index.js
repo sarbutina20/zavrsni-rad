@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
-import { createBrowserRouter, redirect, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorPage from "./routes/ErrorPage/ErrorPage";
 import MainLayout from "./routes/MainLayout";
 import { loaderKnjige, PrikazKnjiga } from "./components/knjiga/PrikazKnjiga";
@@ -12,6 +12,8 @@ import { loaderAutentifikacija, tokenLoader } from "./components/autentifikacija
 import Registracija, { actionRegistracija } from "./components/autentifikacija/Registracija";
 import { Provider } from 'react-redux'
 import store from "./store/store";
+import Checkout from "./components/checkout/Checkout";
+import UspjesnaTransakcija from "./components/checkout/UspjesnaTransakcija"
 
 const router = createBrowserRouter([
   {
@@ -39,15 +41,20 @@ const router = createBrowserRouter([
       },
       {
         path: "odjava",
-        action: actionOdjava,
-        loader: () => {
-          return redirect('/')
-        }
+        action: actionOdjava
       },
       {
         path: "knjige",
         element: <PrikazKnjiga></PrikazKnjiga>,
         loader: loaderKnjige,
+      },
+      {
+        path: "checkout",
+        element: <Checkout></Checkout>
+      },
+      {
+        path: "uspjesnaTransakcija",
+        element: <UspjesnaTransakcija></UspjesnaTransakcija>
       }
     ],
   },

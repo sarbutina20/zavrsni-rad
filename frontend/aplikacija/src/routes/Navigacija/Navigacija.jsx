@@ -2,6 +2,7 @@ import { NavLink, useRouteLoaderData } from "react-router-dom";
 import { Form } from "react-router-dom";
 import styles from "./Navigacija.module.css";
 import CartButton from "../../components/kosarica/Cart/CartButton";
+import Button from "../../components/UI/Button";
 
 const Navigacija = () => {
   const token = useRouteLoaderData("root");
@@ -37,7 +38,7 @@ const Navigacija = () => {
       {token && (
         <li>
           <Form method="post" action="/odjava">
-            <button type="submit">Odjava</button>
+            <Button>Odjava</Button>
           </Form>
         </li>
       )}

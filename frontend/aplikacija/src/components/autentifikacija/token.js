@@ -22,3 +22,7 @@ export function loaderAutentifikacija() {
     if(token) return redirect('/')
     else return null;
 }
+
+export function dohvatiKosaricu() {
+    
+}

@@ -1,9 +1,8 @@
-import { Form, redirect, useActionData } from "react-router-dom";
-import styles from "./autentifikacija.module.css"
-
+import { Form, redirect } from "react-router-dom";
+import styles from "./autentifikacija.module.css";
+import Button from "../UI/Button";
 
 export const Prijava = () => {
-
   return (
     <Form method="post" className={styles.loginForm}>
       <label htmlFor="username">Korisničko ime </label>
@@ -18,8 +17,7 @@ export const Prijava = () => {
         required
       ></input>
       <br></br>
-      <input type="hidden" name="dispatch" value={dispatch}></input>
-      <button type="submit">Prijava</button>
+      <Button>Prijava</Button>
     </Form>
   );
 };
@@ -40,18 +38,17 @@ export const actionPrijava = async ({ request }) => {
     });
 
     if (!odgovor.ok) {
-        const errorPoruka = await odgovor.json()
+      const errorPoruka = await odgovor.json();
       throw new Error(errorPoruka.error);
     }
 
     const vraceniOdgovor = await odgovor.json();
-    const token = vraceniOdgovor.token
-   
+    const token = vraceniOdgovor.token;
 
     const expirationDate = new Date();
     expirationDate.setHours(expirationDate.getHours() + 1);
     document.cookie = `token=${token}; expires=${expirationDate.toUTCString()}; path=/;`;
-    
+
     return redirect("/");
   } catch (error) {
     throw new Error(error.message);

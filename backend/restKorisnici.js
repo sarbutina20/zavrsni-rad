@@ -9,7 +9,7 @@ exports.prijava = function (zahtjev, odgovor) {
                 odgovor.status(400).json({error:poruka.error})
             }
             else {
-                console.log(poruka.kosarica)
+                
                 odgovor.status(200).json({ token: poruka.token, kosarica: poruka.kosarica });
             }
         });

@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Navigacija from "./Navigacija/Navigacija";
 import { useSelector } from "react-redux";
-import Cart from "../components/kosarica/Cart/Cart";
+import Modal from "../components/UI/Modal";
 
 
 export default function MainLayout() {
@@ -10,7 +10,7 @@ export default function MainLayout() {
     <>
       
       <Navigacija></Navigacija>
-      {showCart && <Cart></Cart>}
+      {showCart && <Modal></Modal>}
       <Outlet></Outlet>
     </>
   );

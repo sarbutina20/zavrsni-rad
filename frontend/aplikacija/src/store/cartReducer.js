@@ -6,23 +6,21 @@ const cartSlice = createSlice({
     stavke: [],
     ukupnaCijenaStavki: 0,
     ukupnaKolicina: 0,
+    prviLogin: true,
   },
   reducers: {
     postavljanjeStanja: (state, action) => {
-      const kosarica = action.payload
-      const postojecaKosarica = state.stavke.length !== 0 && state.ukupnaKolicina !== 0 && state.ukupnaCijenaStavki !== 0
-      if(postojecaKosarica) return;
-      else {
-        state.stavke = kosarica.stavke
-        state.ukupnaCijenaStavki = kosarica.ukupnaCijenaStavki
-        state.ukupnaKolicina = kosarica.ukupnaKolicina
-      }
+      state.prviLogin = false;
+      const kosarica = action.payload;
+      state.stavke = kosarica.stavke;
+      state.ukupnaCijenaStavki = kosarica.ukupnaCijenaStavki;
+      state.ukupnaKolicina = kosarica.ukupnaKolicina;
     },
 
     brisanjeStanja: (state, action) => {
-      state.stavke = []
-      state.ukupnaCijenaStavki = 0
-      state.ukupnaKolicina = 0
+      state.stavke = [];
+      state.ukupnaCijenaStavki = 0;
+      state.ukupnaKolicina = 0;
     },
 
     addToCart: (state, action) => {
@@ -54,7 +52,7 @@ const cartSlice = createSlice({
       const postojecaKnjiga = state.stavke.find(
         (knjiga) => knjiga.isbn === isbn
       );
-      
+
       state.ukupnaCijenaStavki =
         state.ukupnaCijenaStavki - postojecaKnjiga.cijena;
       state.ukupnaKolicina--;
@@ -69,6 +67,7 @@ const cartSlice = createSlice({
   },
 });
 
-export const { addToCart, removeFromCart, postavljanjeStanja, brisanjeStanja } = cartSlice.actions;
+export const { addToCart, removeFromCart, postavljanjeStanja, brisanjeStanja } =
+  cartSlice.actions;
 
 export default cartSlice.reducer;
