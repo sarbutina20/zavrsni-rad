@@ -1,15 +1,25 @@
 import {useSelector } from "react-redux";
 import {dohvatiToken} from "../autentifikacija/token"
+import styles from "../UI/Modal.module.css"
 
 
 const PayButton = ({ cartItems }) => {
-  const narudzba = useSelector((state) => state.cart.stavke);
+  const stavke = useSelector((state) => state.cart.stavke);
 
   const handleCheckout = async () => {
     const token = dohvatiToken();
       if (!token) {
         throw new Error("Morate biti prijavljeni kako bi pristupili resursu");
       }
+
+      const stavkeBezOpisa = stavke.map(stavka => ({
+        isbn: stavka.isbn,
+        autor: stavka.autor,
+        naslov: stavka.naslov,
+        cijena: stavka.cijena,
+        ukupnaCijena: stavka.cijena,
+        kolicina: stavka.kolicina
+      }))
 
     try {
       const odgovor = await fetch("http://localhost:5000/api/narudzbe", {
@@ -19,7 +29,7 @@ const PayButton = ({ cartItems }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          narudzba: narudzba
+          narudzba: stavkeBezOpisa
         }),
       });
   
@@ -37,7 +47,7 @@ const PayButton = ({ cartItems }) => {
 
   return (
     <>
-      <button onClick={() => handleCheckout()}>Naruči knjige</button>
+      <button className={styles.navLink} onClick={() => handleCheckout()}>Naruči knjige</button>
     </>
   );
 };

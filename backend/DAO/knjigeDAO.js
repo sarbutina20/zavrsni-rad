@@ -10,17 +10,32 @@ class KnjigeDAO {
     this.knjigeSlike = "https://covers.openlibrary.org/a/id/";
   }
 
-  async kreirajNarudzbu(narudzba, korisnik) {
+  async kreirajNarudzbu(narudzba, kupac) {
     const db = await this.baza.poveziSeNaBazu();
     const baza = db.database;
     const kolekcijaNarudzbi = baza.collection("narudzbe");
     const trenutniDatum = new Date();
+
+    const proizvodi = JSON.parse(kupac.metadata.cart);
+    const stavke = proizvodi.map((knjiga) => {
+      return {
+        isbn: knjiga.isbn,
+        kolicina: knjiga.kolicina,
+        autor: knjiga.autor,
+        naslov: knjiga.naslov,
+        ukupnaCijena: knjiga.ukupnaCijena,
+        cijena: knjiga.cijena,
+      };
+    });
     const novaNarudzba = {
-      stavke: narudzba.stavke,
-      ukupnaCijenaStavki: narudzba.ukupnaCijenaStavki,
+      stavke: stavke,
       datum: trenutniDatum.toISOString(),
-      Korisnik_ID: new ObjectId(korisnik._id),
+      Korisnik_ID: new ObjectId(kupac.metadata.userId),
+      ukupnaCijenaStavki: narudzba.amount_total,
+      adresa: narudzba.customer_details
     };
+
+    
     try {
       const povratneInfo = await kolekcijaNarudzbi.insertOne(novaNarudzba);
       db.prekiniVezu();

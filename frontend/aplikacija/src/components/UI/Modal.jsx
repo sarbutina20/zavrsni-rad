@@ -4,7 +4,6 @@ import { toggleCart } from "../../store/UI";
 import Cart from "../kosarica/Cart/Cart";
 import styles from "./Modal.module.css";
 import Button from "./Button";
-import {NavLink} from "react-router-dom"
 import PayButton from "../checkout/PayButton";
 
 const Modal = () => {
