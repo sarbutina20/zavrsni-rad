@@ -1,6 +1,7 @@
 import { Form, redirect } from "react-router-dom";
 import styles from "./autentifikacija.module.css";
-import Button from "../UI/Button";
+import Button from "../UI/Button/Button";
+const konfiguracija = require("../../konfiguracija.json")
 
 export const Prijava = () => {
   return (
@@ -26,7 +27,7 @@ export const actionPrijava = async ({ request }) => {
   try {
     const podaci = await request.formData();
 
-    const odgovor = await fetch("http://localhost:5000/api/prijava", {
+    const odgovor = await fetch(`${konfiguracija.restAPI}prijava`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

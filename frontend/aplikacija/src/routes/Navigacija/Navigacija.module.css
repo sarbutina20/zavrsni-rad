@@ -1,17 +1,3 @@
-@font-face {
-  font-family: 'LatoRegular';
-  src: url('../../fonts/Lato-Regular.ttf') format('ttf');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'LatoBold';
-  src: url('../../fonts/Lato-Bold.ttf') format('ttf');
-  font-weight: bold;
-  font-style: normal;
-}
-  
 
 .navTraka  {
   list-style-type: none;

@@ -1,8 +1,8 @@
 import { NavLink, useRouteLoaderData } from "react-router-dom";
 import { Form } from "react-router-dom";
 import styles from "./Navigacija.module.css";
-import CartButton from "../../components/kosarica/Cart/CartButton";
-import Button from "../../components/UI/Button";
+import CartButton from "../../components/kosarica/CartButton/CartButton";
+import Button from "../../components/UI/Button/Button";
 
 const Navigacija = () => {
   const token = useRouteLoaderData("root");

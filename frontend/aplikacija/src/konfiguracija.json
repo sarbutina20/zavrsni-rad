@@ -1,0 +1,5 @@
+{
+    "restAPI":"http://localhost:5000/api/",
+    "port": 5000,
+    "appPort":3000
+}

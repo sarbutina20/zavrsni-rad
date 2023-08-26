@@ -12,6 +12,7 @@ class KorisniciDAO {
     try {
       const db = await this.baza.poveziSeNaBazu();
       const baza = db.database;
+
       const korisniciKolekcija = baza.collection("korisnici");
       const ulogeKolekcija = baza.collection("uloge");
       const kosaricaKolekcija = baza.collection("kosarica")
@@ -40,7 +41,6 @@ class KorisniciDAO {
           Korisnik_ID: dohvaceniKorisnik._id,
         });
         
-        
         const token = await jwt.kreirajToken({
           korisnik: dohvaceniKorisnik,
           Uloga: uloga,
@@ -56,13 +56,14 @@ class KorisniciDAO {
     } catch (error) {
       db.prekiniVezu();
       console.error("Greška pri prijavi:", error);
-      return { error: "Greška pri prijavi" };
+      return { error: "Greška pri prijavi." };
     }
   }
 
   async registracija(noviKorisnik) {
     const db = await this.baza.poveziSeNaBazu();
     const korisniciKolekcija = db.database.collection("korisnici");
+    
     const hashiranaLozinka = await bcrypt.hash(noviKorisnik.Lozinka, 12);
 
     try {
@@ -72,20 +73,23 @@ class KorisniciDAO {
         Email: noviKorisnik.Email,
         Uloga_ID: new ObjectId("64e22057f9497eba62ed9513"),
       };
+
       const povratneInfo = await korisniciKolekcija.insertOne(
         noviKorisnikObjekt
       );
+
       db.prekiniVezu();
       console.log("Korisnik uspješno unesen");
+
       return povratneInfo;
     } catch (error) {
       db.prekiniVezu();
       if (error.code === 11000) {
-        console.warn("Korisničko ime već postoji.");
+        console.error("Korisničko ime već postoji.");
         return { error: "Korisničko ime već postoji." };
       } else {
         console.error("Greška pri unosu korisnika:", error);
-        return { error: "Greška pri unosu korisnika:" };
+        return { error: "Greška pri unosu korisnika." };
       }
     }
 

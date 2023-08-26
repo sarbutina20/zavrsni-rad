@@ -1,10 +1,10 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { toggleCart } from "../../store/UI";
-import Cart from "../kosarica/Cart/Cart";
+import { toggleCart } from "../../../store/UI";
+import Cart from "../../kosarica/Cart/Cart";
 import styles from "./Modal.module.css";
-import Button from "./Button";
-import PayButton from "../checkout/PayButton";
+import Button from "../Button/Button";
+import PayButton from "../../checkout/PayButton";
 
 const Modal = () => {
   const showCart = useSelector((state) => state.UI.showCart);

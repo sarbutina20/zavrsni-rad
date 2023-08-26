@@ -10,18 +10,18 @@ exports.kreirajToken = async function (korisnik) {
     };
 
     const tajniKljuc = process.env.JWT;
-    console.log(tajniKljuc)
     const token = jwt.sign(payload, tajniKljuc, { expiresIn: '1h' });
+
     return token;
 }
 
 exports.verificirajToken = function (zahtjev, odgovor, nastavi) {
     const token = zahtjev.header('Authorization');
     const tajniKljuc = process.env.JWT;
+    
     if (!token) {
         return odgovor.status(402).json({ error: 'Nedostaje token' });
     }
-
 
     try {
         const provjerenToken = jwt.verify(token, tajniKljuc);

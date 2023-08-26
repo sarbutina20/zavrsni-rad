@@ -5,12 +5,10 @@ const cartSlice = createSlice({
   initialState: {
     stavke: [],
     ukupnaCijenaStavki: 0,
-    ukupnaKolicina: 0,
-    prviLogin: true,
+    ukupnaKolicina: 0
   },
   reducers: {
     postavljanjeStanja: (state, action) => {
-      state.prviLogin = false;
       const kosarica = action.payload;
       state.stavke = kosarica.stavke;
       state.ukupnaCijenaStavki = kosarica.ukupnaCijenaStavki;
@@ -56,6 +54,7 @@ const cartSlice = createSlice({
       state.ukupnaCijenaStavki =
         state.ukupnaCijenaStavki - postojecaKnjiga.cijena;
       state.ukupnaKolicina--;
+      
       if (postojecaKnjiga.kolicina === 1) {
         state.stavke = state.stavke.filter((knjiga) => knjiga.isbn !== isbn);
       } else {

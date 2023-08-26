@@ -1,5 +1,6 @@
 import { Form, redirect } from "react-router-dom";
 import styles from "./autentifikacija.module.css"
+const konfiguracija = require("../../konfiguracija.json")
 
 const Registracija = () => {
     return (
@@ -28,7 +29,7 @@ export async function actionRegistracija({ request }) {
     try {
         const podaci = await request.formData();
     
-        const odgovor = await fetch("http://localhost:5000/api/registracija", {
+        const odgovor = await fetch(`${konfiguracija.restAPI}registracija`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

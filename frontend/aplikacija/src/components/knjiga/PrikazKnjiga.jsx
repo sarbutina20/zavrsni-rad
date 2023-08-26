@@ -2,6 +2,7 @@ import { useLoaderData } from "react-router-dom";
 import Knjiga from "./knjiga";
 import styles from "../knjiga/knjiga.module.css";
 import { dohvatiToken } from "../autentifikacija/token";
+const konfiguracija = require("../../konfiguracija.json");
 
 export const PrikazKnjiga = () => {
   const dohvaceneKnjige = useLoaderData();
@@ -16,32 +17,32 @@ export const PrikazKnjiga = () => {
 };
 
 export async function loaderKnjige() {
+  const token = dohvatiToken();
+  if (!token) {
+    throw new Error("Morate biti prijavljeni kako bi pristupili resursu");
+  }
+
   const spremljeneKnjigeString = localStorage.getItem("knjige");
   if (spremljeneKnjigeString) {
-    const spremljeneKnjige = JSON.parse(spremljeneKnjigeString)
-    
+    const spremljeneKnjige = JSON.parse(spremljeneKnjigeString);
     return spremljeneKnjige;
-  }
-  else {
+  } else {
     try {
-      const token = dohvatiToken();
-      if (!token) {
-        throw new Error("Morate biti prijavljeni kako bi pristupili resursu");
-      }
-
-      const odgovor = await fetch(`http://localhost:5000/api/knjige`, {
+      const odgovor = await fetch(`${konfiguracija.restAPI}knjige`, {
         headers: {
           Authorization: token,
         },
       });
 
-      if (!odgovor.ok) {
-        const errorMessage = await odgovor.json();
-        throw new Error(errorMessage.error);
-      }
       const podaci = await odgovor.json();
-      const spremljeniPodaci = JSON.stringify(podaci.knjige)
-      localStorage.setItem("knjige", spremljeniPodaci)
+
+      if (!odgovor.ok) {
+        throw new Error(podaci.error);
+      }
+      
+      const spremljeniPodaci = JSON.stringify(podaci.knjige);
+      localStorage.setItem("knjige", spremljeniPodaci);
+
       return podaci.knjige;
     } catch (error) {
       throw new Error(error.message);

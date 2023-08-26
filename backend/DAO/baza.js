@@ -9,7 +9,6 @@ class Baza {
     async poveziSeNaBazu() {
         try {
             await this.client.connect();
-            console.log('Povezan s bazom podataka');
 
             const db = this.client.db();
 
@@ -24,7 +23,6 @@ class Baza {
     async prekiniVezu() {
         try {
             await this.client.close();
-            console.log('Veza s bazom prekinuta');
         } catch (error) {
             console.error('Greška pri prekidanju veze s bazom podataka', error);
         }

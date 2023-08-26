@@ -1,11 +1,9 @@
 require("dotenv").config();
 const express = require("express");
-const bodyParser = require("body-parser");
 const cors = require("cors");
 const restKorisnici = require("./restKorisnici.js");
 const restKnjige = require("./restKnjige.js");
 const konfiguracija = require("./konfiguracija.json");
-const { MongoClient } = require("mongodb");
 const jwt = require("./jwt.js");
 
 const app = express();
@@ -33,15 +31,14 @@ const pripremaPutanja = () => {
   app.post("/api/prijava", restKorisnici.prijava);
   app.post("/api/registracija", restKorisnici.registracija);
 
-  app.get("/api/korisnici/:id", jwt.verificirajToken, restKorisnici.korisnik);
-
   app.get("/api/knjige", jwt.verificirajToken, restKnjige.knjige);
 
-  app.get("/api/bazaKnjige", jwt.verificirajToken, restKnjige.bazaKnjige);
-
-  app.get("/api/narudzbe", jwt.verificirajToken, restKnjige.narudzbe);
   app.post("/api/narudzbe", jwt.verificirajToken, restKnjige.narudzbe);
   app.post("/api/stripe/webhook",express.raw({ type: "application/json" }),restKnjige.webhooks);
+
+  //app.get("/api/korisnici/:id", jwt.verificirajToken, restKorisnici.korisnik);
+  //app.get("/api/bazaKnjige", jwt.verificirajToken, restKnjige.bazaKnjige);
+  //app.get("/api/narudzbe", jwt.verificirajToken, restKnjige.narudzbe);
 };
 
 pokreniServer();

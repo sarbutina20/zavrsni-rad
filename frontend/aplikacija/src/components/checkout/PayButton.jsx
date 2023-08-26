@@ -1,53 +1,50 @@
-import {useSelector } from "react-redux";
-import {dohvatiToken} from "../autentifikacija/token"
-import styles from "../UI/Modal.module.css"
+import { useSelector } from "react-redux";
+import { dohvatiToken } from "../autentifikacija/token";
+import styles from "../UI/Modal/Modal.module.css";
+const konfiguracija = require("../../konfiguracija.json");
 
-
-const PayButton = ({ cartItems }) => {
+const PayButton = () => {
   const stavke = useSelector((state) => state.cart.stavke);
 
-  const handleCheckout = async () => {
+  const checkoutHandler = async () => {
     const token = dohvatiToken();
-      if (!token) {
-        throw new Error("Morate biti prijavljeni kako bi pristupili resursu");
-      }
+    if (!token) {
+      throw new Error("Morate biti prijavljeni kako bi pristupili resursu");
+    }
 
-      const stavkeBezOpisa = stavke.map(stavka => ({
-        isbn: stavka.isbn,
-        autor: stavka.autor,
-        naslov: stavka.naslov,
-        cijena: stavka.cijena,
-        ukupnaCijena: stavka.cijena,
-        kolicina: stavka.kolicina
-      }))
+    const stavkeBezOpisa = stavke.map((stavka) => ({
+      isbn: stavka.isbn,
+      autor: stavka.autor,
+      naslov: stavka.naslov,
+      cijena: stavka.cijena,
+      ukupnaCijena: stavka.cijena,
+      kolicina: stavka.kolicina,
+    }));
 
     try {
-      const odgovor = await fetch("http://localhost:5000/api/narudzbe", {
+      const odgovor = await fetch(`${konfiguracija.restAPI}narudzbe`, {
         method: "POST",
         headers: {
           Authorization: token,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          narudzba: stavkeBezOpisa
+          narudzba: stavkeBezOpisa,
         }),
       });
-  
-      const podaci = await odgovor.json()
-      const url = podaci.url;
 
-      
-      
-      window.location.href = url;
+      const podaci = await odgovor.json();
+      window.location.href = podaci.url;
     } catch (error) {
-      throw new Error(error.message)
+      throw new Error(error.message);
     }
-    
   };
 
   return (
     <>
-      <button className={styles.navLink} onClick={() => handleCheckout()}>Naruči knjige</button>
+      <button className={styles.navLink} onClick={() => checkoutHandler()}>
+        Naruči knjige
+      </button>
     </>
   );
 };
