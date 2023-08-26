@@ -1,15 +1,21 @@
 import { useSelector } from "react-redux";
 import { dohvatiToken } from "../autentifikacija/token";
 import styles from "../UI/Modal/Modal.module.css";
+import { validacijaStavkiNarudzbe } from "../../validacija";
+
 const konfiguracija = require("../../konfiguracija.json");
 
 const PayButton = () => {
   const stavke = useSelector((state) => state.cart.stavke);
 
+
   const checkoutHandler = async () => {
     const token = dohvatiToken();
     if (!token) {
       throw new Error("Morate biti prijavljeni kako bi pristupili resursu");
+    }
+    if(validacijaStavkiNarudzbe(stavke) === false) {
+      return;
     }
 
     const stavkeBezOpisa = stavke.map((stavka) => ({
@@ -17,7 +23,6 @@ const PayButton = () => {
       autor: stavka.autor,
       naslov: stavka.naslov,
       cijena: stavka.cijena,
-      ukupnaCijena: stavka.cijena,
       kolicina: stavka.kolicina,
     }));
 
@@ -32,8 +37,8 @@ const PayButton = () => {
           narudzba: stavkeBezOpisa,
         }),
       });
-
       const podaci = await odgovor.json();
+      
       window.location.href = podaci.url;
     } catch (error) {
       throw new Error(error.message);

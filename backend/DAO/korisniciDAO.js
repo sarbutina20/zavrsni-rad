@@ -10,6 +10,9 @@ class KorisniciDAO {
 
   async prijava(korisnik) {
     try {
+      
+
+
       const db = await this.baza.poveziSeNaBazu();
       const baza = db.database;
 

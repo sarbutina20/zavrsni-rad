@@ -23,3 +23,16 @@
   box-sizing: border-box;
 }
 
+.errorPoruka {
+  border: 2px solid red;
+  font-size: 0.8em;
+  text-align: center;
+  padding: 0;
+  margin-top: 2em;
+  font-family: 'LatoBold';
+  font-weight: bold;
+  font-size: 18px;
+  max-width: 50em;
+  margin-left:auto;
+  margin-right: auto;
+}

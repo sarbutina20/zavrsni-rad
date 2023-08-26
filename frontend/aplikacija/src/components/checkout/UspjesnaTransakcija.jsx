@@ -1,15 +1,19 @@
-import { useEffect } from "react"
-import { useDispatch } from "react-redux"
-import {brisanjeStanja} from "../../store/cartReducer"
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { brisanjeStanja } from "../../store/cartReducer";
 
-const UspjesnaTransakcija = ( ) => {
-    const dispatch = useDispatch()
+const UspjesnaTransakcija = () => {
+  const dispatch = useDispatch();
 
-    useEffect(() => {
-        dispatch(brisanjeStanja())
-    }, [dispatch])
+  useEffect(() => {
+    dispatch(brisanjeStanja());
+  }, [dispatch]);
 
-    return <h1>Uspješna transakcija</h1>
-}
+  return (
+    <div>
+      <h1>Uspješna transakcija</h1>
+    </div>
+  );
+};
 
-export default UspjesnaTransakcija
+export default UspjesnaTransakcija;

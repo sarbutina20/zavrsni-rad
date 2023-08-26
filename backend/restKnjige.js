@@ -53,13 +53,15 @@ exports.narudzbe = async function (zahtjev, odgovor) {
               autor: knjiga.autor,
             },
           },
-          unit_amount: knjiga.ukupnaCijena * 100,
+          unit_amount: knjiga.cijena * 100,
         },
         quantity: knjiga.kolicina,
       };
     });
 
     const session = await stripe.checkout.sessions.create({
+      success_url: `http://localhost:${appPort}/uspjesnaTransakcija`,
+      cancel_url: `http://localhost:${appPort}`,
       line_items: line_items,
       payment_method_types: ["card"],
       shipping_address_collection: {
@@ -111,12 +113,10 @@ exports.narudzbe = async function (zahtjev, odgovor) {
         enabled: true,
       },
       mode: "payment",
-      customer: customer.id,
-      success_url: `http://localhost:${appPort}/uspjesnaTransakcija`,
-      cancel_url: `http://localhost:${appPort}`,
+      customer: customer.id
     });
 
-    odgovor.send({ url: session.url });
+    odgovor.status(303).send({ url: session.url });
 
   }
 };
