@@ -1,15 +1,80 @@
-import { Form, redirect, useActionData } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styles from "./autentifikacija.module.css";
 import Button from "../UI/Button/Button";
 import { validacijaPrijava } from "../../validacija";
+import { postavljanjeStanja } from "../../store/cartReducer";
+import { useDispatch } from "react-redux";
+import Cookies from "js-cookie";
+import { toggleAuth } from "../../store/UI";
+import { useState } from "react";
 
 const konfiguracija = require("../../konfiguracija.json");
 
 export const Prijava = () => {
-  const errorPoruke = useActionData();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [errorPoruke, setErrorPoruke] = useState([])
+
+  const upravljanjePrijavom = async (event) => {
+    event.preventDefault();
+    const podaci = new FormData(event.target);
+
+    try {
+      const KorisnickoIme = podaci.get("username");
+      const Lozinka = podaci.get("password");
+
+      const validacijaPodataka = validacijaPrijava({
+        KorisnickoIme,
+        Lozinka,
+      });
+
+      if (validacijaPodataka) {
+        setErrorPoruke(validacijaPodataka);
+        return;
+      }
+
+      const odgovor = await fetch(`${konfiguracija.restAPI}prijava`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          KorisnickoIme,
+          Lozinka,
+        }),
+      });
+
+
+      const vraceniOdgovor = await odgovor.json();
+
+      if (!odgovor.ok) {
+        const polje = [vraceniOdgovor.error];
+        setErrorPoruke(polje);
+        return;
+      }
+
+      setErrorPoruke([]);
+      dispatch(toggleAuth());
+
+
+      const token = vraceniOdgovor.token;
+      const expirationDate = new Date();
+      expirationDate.setHours(expirationDate.getHours() + 1);
+      Cookies.set("token", token, { expires: expirationDate, path: "/" });
+
+      const kosarica = vraceniOdgovor.kosarica;
+      if(kosarica) dispatch(postavljanjeStanja(kosarica));
+
+
+      navigate("/");
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
   return (
     <>
-      {errorPoruke && (
+      {errorPoruke.length > 0 && (
         <div className={styles.errorPoruka}>
           <h3>Pogreška!</h3>
           {errorPoruke.map((errorPoruka, index) => (
@@ -17,7 +82,11 @@ export const Prijava = () => {
           ))}
         </div>
       )}
-      <Form method="post" className={styles.loginForm}>
+      <form
+        method="post"
+        onSubmit={upravljanjePrijavom}
+        className={styles.loginForm}
+      >
         <label htmlFor="username">Korisničko ime </label>
         <input
           name="username"
@@ -36,50 +105,7 @@ export const Prijava = () => {
         ></input>
         <br></br>
         <Button>Prijava</Button>
-      </Form>
+      </form>
     </>
   );
-};
-
-export const actionPrijava = async ({ request }) => {
-  try {
-    const podaci = await request.formData();
-
-    const KorisnickoIme = podaci.get("username");
-    const Lozinka = podaci.get("password");
-
-    const validacijaPodataka = validacijaPrijava({
-      KorisnickoIme,
-      Lozinka,
-    });
-    if (validacijaPodataka) return validacijaPodataka;
-
-    const odgovor = await fetch(`${konfiguracija.restAPI}prijava`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        KorisnickoIme,
-        Lozinka,
-      }),
-    });
-
-    if (!odgovor.ok) {
-      const errorPoruka = await odgovor.json();
-      const polje = [errorPoruka.error];
-      return polje;
-    }
-
-    const vraceniOdgovor = await odgovor.json();
-    const token = vraceniOdgovor.token;
-
-    const expirationDate = new Date();
-    expirationDate.setHours(expirationDate.getHours() + 1);
-    document.cookie = `token=${token}; expires=${expirationDate.toUTCString()}; path=/;`;
-
-    return redirect("/");
-  } catch (error) {
-    throw new Error(error.message);
-  }
 };

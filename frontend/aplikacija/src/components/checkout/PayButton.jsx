@@ -20,7 +20,7 @@ const PayButton = () => {
 
     const stavkeBezOpisa = stavke.map((stavka) => ({
       isbn: stavka.isbn,
-      autor: stavka.autor,
+      //autor: stavka.autor,
       naslov: stavka.naslov,
       cijena: stavka.cijena,
       kolicina: stavka.kolicina,

@@ -15,7 +15,7 @@ const cartSlice = createSlice({
       state.ukupnaKolicina = kosarica.ukupnaKolicina;
     },
 
-    brisanjeStanja: (state, action) => {
+    brisanjeStanja: (state) => {
       state.stavke = [];
       state.ukupnaCijenaStavki = 0;
       state.ukupnaKolicina = 0;

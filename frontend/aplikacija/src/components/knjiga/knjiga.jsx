@@ -1,6 +1,8 @@
 import styles from "./knjiga.module.css";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../store/cartReducer";
+import { azurirajKosaricu } from "../kosarica/CartItem/CartItem";
+import store from "../../store/store";
 
 const Knjiga = ({ knjiga }) => {
   const dispatch = useDispatch();
@@ -9,6 +11,11 @@ const Knjiga = ({ knjiga }) => {
     const { isbn, autor, naslov, opis, cijena } = knjiga;
 
     dispatch(addToCart({ isbn, autor, naslov, opis, cijena }));
+
+    const trenutnaKosarica = store.getState().cart;
+
+    azurirajKosaricu(trenutnaKosarica);
+
   };
 
   return (

@@ -10,8 +10,6 @@ class KorisniciDAO {
 
   async prijava(korisnik) {
     try {
-      
-
 
       const db = await this.baza.poveziSeNaBazu();
       const baza = db.database;
@@ -66,6 +64,7 @@ class KorisniciDAO {
   async registracija(noviKorisnik) {
     const db = await this.baza.poveziSeNaBazu();
     const korisniciKolekcija = db.database.collection("korisnici");
+    const kosariceKolekcija = db.database.collection("kosarica");
     
     const hashiranaLozinka = await bcrypt.hash(noviKorisnik.Lozinka, 12);
 
@@ -80,6 +79,15 @@ class KorisniciDAO {
       const povratneInfo = await korisniciKolekcija.insertOne(
         noviKorisnikObjekt
       );
+
+      const novaKosarica = {
+        stavke: [],
+        ukupnaCijenaStavki: 0,
+        ukupnaKolicina: 0,
+        Korisnik_ID: povratneInfo.insertedId
+      }
+
+      const stvaranjeKosarice = await kosariceKolekcija.insertOne(novaKosarica);
 
       db.prekiniVezu();
       console.log("Korisnik uspješno unesen");

@@ -6,18 +6,21 @@ const konfiguracija = require("./konfiguracija.json");
 
 
 exports.knjige = async function (zahtjev, odgovor) {
+  
   const kdao = new KnjigeDAO();
-
+  const korisnik = zahtjev.korisnik;
   try {
-    const poruka = await kdao.knjige_NYT();
-    if (poruka.error) {
-      odgovor.status(400).json({ error: poruka.error });
-    } else {
-      odgovor.status(200).json({ knjige: poruka.knjige });
-    }
+    kdao.knjige_NYT(korisnik).then((poruka) => {
+      if (poruka.error) {
+        odgovor.status(400).json({ error: poruka.error });
+      } else {
+        odgovor.status(200).json({ knjige: poruka.knjige });
+      }
+    });
   } catch (serverError) {
     odgovor.status(500).json({ error: serverError });
   }
+
 
 };
 
@@ -32,6 +35,8 @@ exports.narudzbe = async function (zahtjev, odgovor) {
 
     const narudzba = zahtjev.body.narudzba;
     const korisnik = zahtjev.korisnik;
+    
+
 
     const customer = await stripe.customers.create({
       metadata: {
@@ -47,10 +52,8 @@ exports.narudzbe = async function (zahtjev, odgovor) {
           product_data: {
             name: knjiga.naslov,
             images: [knjiga.slika],
-            description: knjiga.opis,
             metadata: {
-              id: knjiga.isbn,
-              autor: knjiga.autor,
+              id: knjiga.isbn.toString(),
             },
           },
           unit_amount: knjiga.cijena * 100,
@@ -143,6 +146,32 @@ exports.webhooks = async (zahtjev, odgovor) => {
       odgovor.status(500).json({ error: serverError });
     }
   }
+};
+
+exports.kosarica = function (zahtjev, odgovor) {
+  const korisnik = zahtjev.korisnik;
+  const kdao = new KnjigeDAO();
+
+  if (zahtjev.method === "GET") {
+    kdao.dohvatiKosaricu(korisnik).then((poruka) => {
+      if (poruka.error) {
+        odgovor.status(400).json({ error: poruka.error });
+      } else {
+        odgovor.status(200).json({ kosarica: poruka.kosarica });
+      }
+    });
+  }
+
+  else if (zahtjev.method === "PUT") {
+    kdao.azurirajKosaricu(korisnik, zahtjev.body).then((poruka) => {
+      if (poruka.error) {
+        odgovor.status(400).json({ error: poruka.error });
+      } else {
+        odgovor.status(200).json({ kosarica: poruka.azuriranaKosarica });
+      }
+    });
+  }
+  else odgovor.status(405).json({ error: "Metoda nije dopuštena!" });
 };
 
 exports.bazaKnjige = function (zahtjev, odgovor) {};

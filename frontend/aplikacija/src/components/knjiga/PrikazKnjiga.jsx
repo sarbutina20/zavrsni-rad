@@ -26,26 +26,27 @@ export async function loaderKnjige() {
   if (spremljeneKnjigeString) {
     const spremljeneKnjige = JSON.parse(spremljeneKnjigeString);
     return spremljeneKnjige;
-  } else {
-    try {
-      const odgovor = await fetch(`${konfiguracija.restAPI}knjige`, {
-        headers: {
-          Authorization: token,
-        },
-      });
+  }
+  
+  try {
 
-      const podaci = await odgovor.json();
+    const odgovor = await fetch(`${konfiguracija.restAPI}knjige`, {
+      headers: {
+        Authorization: token,
+      },
+    });
 
-      if (!odgovor.ok) {
-        throw new Error(podaci.error);
-      }
-      
-      const spremljeniPodaci = JSON.stringify(podaci.knjige);
-      localStorage.setItem("knjige", spremljeniPodaci);
+    const podaci = await odgovor.json();
 
-      return podaci.knjige;
-    } catch (error) {
-      throw new Error(error.message);
+    if (!odgovor.ok) {
+      throw new Error(podaci.error);
     }
+
+    const spremljeniPodaci = JSON.stringify(podaci.knjige);
+    localStorage.setItem("knjige", spremljeniPodaci);
+
+    return podaci.knjige;
+  } catch (error) {
+    throw new Error(error);
   }
 }

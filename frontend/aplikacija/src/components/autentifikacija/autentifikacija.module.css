@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 70vh;
+  height: 58vh;
   font-family: "LatoRegular";
   font-weight: normal;
   margin-right: 20px;
@@ -11,6 +11,7 @@
 
 .loginForm label {
   margin-bottom: 8px;
+  font-size:21px;
   font-weight: bold;
 }
 
@@ -19,7 +20,7 @@
   margin-bottom: 16px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  width: 30em;
+  width: 35em;
   box-sizing: border-box;
 }
 
@@ -28,11 +29,14 @@
   font-size: 0.8em;
   text-align: center;
   padding: 0;
-  margin-top: 2em;
   font-family: 'LatoBold';
   font-weight: bold;
-  font-size: 18px;
+  font-size: 16px;
   max-width: 50em;
   margin-left:auto;
   margin-right: auto;
+}
+
+.errorPoruka h3 {
+  font-size: 32px;
 }
