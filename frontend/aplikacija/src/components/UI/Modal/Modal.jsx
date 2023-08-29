@@ -8,13 +8,14 @@ import PayButton from "../../checkout/PayButton";
 
 const Modal = () => {
   const showCart = useSelector((state) => state.UI.showCart);
-  const dispatch = useDispatch();
   const stavke = useSelector(state => state.cart.stavke)
+  const dispatch = useDispatch();
+  
 
   const zatvoriModal = () => {
     dispatch(toggleCart());
   };
-//<NavLink to="/checkout" className={styles.navLink}>Kupi knjige</NavLink>
+
   return (
     <div className={`${styles.modal} ${showCart ? styles.visible : ""}`}>
       

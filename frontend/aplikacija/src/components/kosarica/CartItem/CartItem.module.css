@@ -1,49 +1,49 @@
-.item {
+.knjiga {
   margin: 1rem 0;
   background-color: #575757;
   padding: 1rem;
 }
 
-.item h3 {
+.knjiga h3 {
   margin: 0 0 0.5rem 0;
   font-size: 1.75rem;
 }
 
-.item header {
+.knjiga header {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
 }
 
-.details {
+.detalji {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.quantity span {
+.kolicina span {
   font-size: 1.5rem;
   font-weight: bold;
 }
 
-.price {
+.cijena {
   font-size: 1.5rem;
   font-weight: bold;
 }
 
-.itemprice {
+.cijenaKnjige {
   font-weight: normal;
   font-size: 1rem;
   font-style: italic;
 }
 
-.actions {
+.gumbovi {
   display: flex;
   justify-content: flex-end;
   margin: 0.5rem 0;
 }
 
-.actions button {
+.gumbovi button {
   background-color: transparent;
   border: 1px solid white;
   margin-left: 0.5rem;
@@ -51,8 +51,8 @@
   color: white;
 }
 
-.actions button:hover,
-.actions button:active {
+.gumbovi button:hover,
+.gumbovi button:active {
   background-color: #4b4b4b;
   color: white;
 }

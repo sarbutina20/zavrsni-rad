@@ -1,4 +1,4 @@
-.button {
+.gumb {
   background-color: transparent;
   border-color: #1ad1b9;
   color: #1ad1b9;
@@ -7,31 +7,31 @@
   height: auto;
 }
 
-.button:hover,
-.button:active {
+.gumb:hover,
+.gumb:active {
   color: white;
 }
 
-.button span {
+.gumb span {
   margin: 0 0.5rem;
   margin-top: 0.25rem;
   margin-left: 0.75rem;
 }
 
-.badge {
+.brojStavki {
   background-color: #1ad1b9;
   border-radius: 30px;
   padding: 0.15rem 1.25rem;
   color: #1d1d1d;
 }
 
-.cartButtonContent {
+.sadrzajGumba {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.cartIcon {
+.ikona {
   margin-top:6px;
   width: 30px;
 }

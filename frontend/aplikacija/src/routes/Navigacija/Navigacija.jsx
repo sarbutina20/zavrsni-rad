@@ -3,14 +3,31 @@ import { Form } from "react-router-dom";
 import styles from "./Navigacija.module.css";
 import CartButton from "../../components/kosarica/CartButton/CartButton";
 import Button from "../../components/UI/Button/Button";
-
+import { useCallback, useEffect, useState } from "react";
+import { dohvatiToken } from "../../components/autentifikacija/token";
 
 const Navigacija = () => {
-  const token = useRouteLoaderData("root");
+  const [token, setToken] = useState(useRouteLoaderData("root"));
 
+  const provjeriToken = useCallback(async () => {
+    if (token === null || token === undefined) {
+      const noviToken = await dohvatiToken();
+      if (noviToken) {
+        setToken(noviToken);
+      }
+    }
+  }, [token]);
+
+  useEffect(() => {
+    const interval = setInterval(provjeriToken, 100);
+  
+    return () => {
+      clearInterval(interval);
+    };
+  }, [provjeriToken]);
 
   return (
-    <ul className={styles.navTraka} key={token}>
+    <ul className={styles.navTraka}>
       <li className={styles.navElement}>
         <NavLink to="/" className={styles.navLink}>
           Naslovna
@@ -44,7 +61,7 @@ const Navigacija = () => {
           </Form>
         </li>
       )}
-       {token && (
+      {token && (
         <li className={styles.cartButton}>
           <CartButton></CartButton>
         </li>

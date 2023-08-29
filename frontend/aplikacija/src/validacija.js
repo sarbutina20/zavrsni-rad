@@ -76,6 +76,7 @@ export const validacijaRegistracija = (podaci) => {
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{6,100}$/.test(
         podaci.Lozinka
       );
+
     if (!provjeraLozinke) {
       errorPoruke.push(
         "Lozinka mora sadržavati barem jedno malo slovo, jedno veliko slovo, jedan broj i jedan specijalni znak"
@@ -86,6 +87,7 @@ export const validacijaRegistracija = (podaci) => {
       typeof podaci.KorisnickoIme === "string" &&
       typeof podaci.Lozinka === "string" &&
       typeof podaci.Email === "string";
+      
     if (!provjeraTipa) {
       errorPoruke.push(
         "Korisničko ime, lozinka i email moraju biti niz znakovnih vrijednosti"

@@ -14,9 +14,9 @@ export const kreirajRouter = () => {
     const router = createBrowserRouter([
         {
           path: "/",
-          loader: tokenLoader,
           element: <MainLayout></MainLayout>,
           errorElement: <ErrorPage></ErrorPage>,
+          loader: tokenLoader,
           id:'root',
           children: [
             {

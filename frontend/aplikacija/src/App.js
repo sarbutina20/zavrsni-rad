@@ -8,7 +8,7 @@ function App() {
     <div className="headerTextContainer">
       <h1>Dobrodošli</h1>
       <p>
-        CapturedImagination je e-trgovina knjiga koja pruža korisnicima jednostavan i
+        Ovo je e-trgovina knjiga koja pruža korisnicima jednostavan i
         praktičan način da istraže, pregledavaju i nabave knjige online.
       </p>
     </div>

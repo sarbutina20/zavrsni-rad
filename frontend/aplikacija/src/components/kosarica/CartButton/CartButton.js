@@ -15,14 +15,14 @@ const CartButton = (props) => {
   const brojStavki = useSelector((state) => state.cart.ukupnaKolicina);
 
   return (
-    <button className={classes.button} onClick={toggleCartHandler}>
-      <div className={classes.cartButtonContent}>
+    <button className={classes.gumb} onClick={toggleCartHandler}>
+      <div className={classes.sadrzajGumba}>
         <img
           src={cartIcon}
           alt="Košarica"
-          className={classes.cartIcon}
+          className={classes.ikona}
         ></img>
-        <span className={classes.badge}>{brojStavki}</span>
+        <span className={classes.brojStavki}>{brojStavki}</span>
       </div>
     </button>
   );
