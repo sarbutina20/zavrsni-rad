@@ -8,18 +8,20 @@ class KnjigeDAO {
     this.baza = new Baza();
   }
 
-  async dohvatiNarudzbe (korisnik) {
+  async dohvatiNarudzbe(korisnik) {
     const db = await this.baza.poveziSeNaBazu();
     const baza = db.database;
     const kolekcijaNarudzbi = baza.collection("narudzbe");
 
     try {
-      const narudzbe = await kolekcijaNarudzbi.find({Korisnik_ID: new ObjectId(korisnik._id)}).toArray();
+      const narudzbe = await kolekcijaNarudzbi
+        .find({ Korisnik_ID: new ObjectId(korisnik._id) })
+        .toArray();
       db.prekiniVezu();
-      return {narudzbe};
+      return { narudzbe };
     } catch (error) {
       console.error("Greška pri dohvaćanju narudžbi iz baze:", error);
-      return {error: "Greška pri dohvaćanju narudžbi iz baze."};
+      return { error: "Greška pri dohvaćanju narudžbi iz baze." };
     }
   }
 
@@ -29,7 +31,7 @@ class KnjigeDAO {
     const kolekcijaNarudzbi = baza.collection("narudzbe");
 
     const trenutniDatum = new Date();
-    
+
     const proizvodi = JSON.parse(kupac.metadata.kosarica);
     const ukupnaCijenaStavki = narudzba.amount_total / 100;
     const stavke = proizvodi.map((knjiga) => {
@@ -138,13 +140,9 @@ class KnjigeDAO {
       return { error: "Greška pri ažuriranju korisnikove košarice." };
     }
   }
-
-
 }
 
 module.exports = KnjigeDAO;
-
-
 
 // SLJEDEĆI KOD JE KORIŠTEN PRI KORIŠTENJU OPENLIBRARY API KOJI SE VIŠE NE KORISTI
 /*async knjige(nazivKategorije) {

@@ -3,10 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../store/cartReducer";
 import { azurirajKosaricu } from "../kosarica/CartItem/CartItem";
 import store from "../../store/store";
+import { useNavigate } from "react-router-dom";
 
 const Knjiga = ({ knjiga }) => {
   const ukupnaKolicina = useSelector((state) => state.cart.ukupnaKolicina);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const dodavanjeKosarica = () => {
     
@@ -22,14 +24,17 @@ const Knjiga = ({ knjiga }) => {
 
   };
 
+  const detaljiHandler = () => {
+    navigate(`/knjige/detalji`, { state: knjiga });
+  };
+
   return (
-    <div className={styles.knjiga}>
+    <div className={styles.knjiga} onClick={detaljiHandler}>
       <h3>{knjiga.naslov}</h3>
       <h5>{knjiga.autor}</h5>
       <img src={knjiga.slika} alt={knjiga.naslov}></img>
       <br></br>
       <h3>${knjiga.cijena}</h3>
-
       <button onClick={dodavanjeKosarica}>Dodaj u košaricu</button>
     </div>
   );

@@ -130,7 +130,7 @@ export const validacijaStavkiNarudzbe = (stavke) => {
         }
       }
     }
-    return false; // Ako stavka ne ispunjava sve uvjete
+    return false; 
   });
   if (!validneStavke) {
     throw new Error("Narudžba sadrži neispravne stavke");

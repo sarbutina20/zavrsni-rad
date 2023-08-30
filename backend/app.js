@@ -33,7 +33,7 @@ const pripremaPutanja = () => {
 
   app.get("/api/knjige", jwt.verificirajToken, restKnjige.knjige);
 
-  app.get("/api/narudzbe", jwt.verificirajToken, restKnjige.narudzbe); // NAMJENJENO ZA FUNKCIONALNOST MOJE NARUDZBE
+  app.get("/api/narudzbe", jwt.verificirajToken, restKnjige.narudzbe); 
   app.post("/api/narudzbe", jwt.verificirajToken, restKnjige.narudzbe);
   app.post("/api/stripe/webhook",express.raw({ type: "application/json" }),restKnjige.webhooks);
 
