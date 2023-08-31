@@ -87,7 +87,7 @@ export const validacijaRegistracija = (podaci) => {
       typeof podaci.KorisnickoIme === "string" &&
       typeof podaci.Lozinka === "string" &&
       typeof podaci.Email === "string";
-      
+
     if (!provjeraTipa) {
       errorPoruke.push(
         "Korisničko ime, lozinka i email moraju biti niz znakovnih vrijednosti"
@@ -130,7 +130,7 @@ export const validacijaStavkiNarudzbe = (stavke) => {
         }
       }
     }
-    return false; 
+    return false;
   });
   if (!validneStavke) {
     throw new Error("Narudžba sadrži neispravne stavke");

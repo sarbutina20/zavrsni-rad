@@ -9,6 +9,7 @@ import Registracija, { actionRegistracija } from "./components/autentifikacija/R
 import App from "./App";
 import { createBrowserRouter } from "react-router-dom";
 import KnjigaDetalji from "./components/knjiga/KnjigaDetalji/KnjigaDetalji";
+import MojeNarudzbe, { loaderNarudzbe } from "./components/narudzbe/MojeNarudzbe";
 
 
 export const kreirajRouter = () => {
@@ -47,6 +48,11 @@ export const kreirajRouter = () => {
             {
               path: "knjige/detalji",
               element: <KnjigaDetalji></KnjigaDetalji>,
+            },
+            {
+              path: "mojeNarudzbe",
+              element: <MojeNarudzbe></MojeNarudzbe>,
+              loader: loaderNarudzbe
             },
             {
               path: "uspjesnaTransakcija",

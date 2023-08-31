@@ -40,6 +40,13 @@ const Navigacija = () => {
           </NavLink>
         </li>
       )}
+      {token && (
+        <li className={styles.navElement}>
+          <NavLink to="/mojeNarudzbe" className={styles.navLink}>
+            Narudžbe
+          </NavLink>
+        </li>
+      )}
       {!token && (
         <li className={styles.navElement}>
           <NavLink to="/prijava" className={styles.navLink}>
