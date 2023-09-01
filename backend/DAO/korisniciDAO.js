@@ -77,26 +77,25 @@ class KorisniciDAO {
       console.log("Korisnik uspješno dodan.");
 
       return povratneInfo;
-
     } catch (error) {
       db.prekiniVezu();
       console.error("Greška pri registraciji:", error);
       return { error: "Greška pri registraciji." };
     }
   }
-  
 }
 
 async function stvoriKosaricu(baza, korisnikId) {
+  const kosariceKolekcija = baza.collection("kosarica");
   const novaKosarica = {
     stavke: [],
     ukupnaCijenaStavki: 0,
     ukupnaKolicina: 0,
-    Korisnik_ID: korisnikId,
+    Korisnik_ID: new ObjectId(korisnikId),
   };
 
   try {
-    const stvaranjeKosarice = await baza.kosariceKolekcija.insertOne(
+    const stvaranjeKosarice = await kosariceKolekcija.insertOne(
       novaKosarica
     );
     return stvaranjeKosarice;
@@ -107,7 +106,8 @@ async function stvoriKosaricu(baza, korisnikId) {
 
 async function dodavanjeNovogKorisnika(baza, noviKorisnikObjekt) {
   try {
-    const povratneInfo = await baza.korisniciKolekcija.insertOne(
+    const korisniciKolekcija = baza.collection("korisnici");
+    const povratneInfo = await korisniciKolekcija.insertOne(
       noviKorisnikObjekt
     );
     return povratneInfo;
@@ -127,17 +127,18 @@ async function provjeriLozinku(lozinka, hash) {
 }
 
 async function dohvatiUlogu(baza, ulogaId) {
-  return await baza.collection("uloge").findOne({ _id: ulogaId });
+  const ulogeKolekcja = baza.collection("uloge");
+  return await ulogeKolekcja.findOne({ _id: ulogaId });
 }
 
 async function dohvatiKorisnika(baza, korisnickoIme) {
-  return await baza
-    .collection("korisnici")
-    .findOne({ KorisnickoIme: korisnickoIme });
+  const korisniciKolekcija = baza.collection("korisnici");
+  return await korisniciKolekcija.findOne({ KorisnickoIme: korisnickoIme });
 }
 
 async function dohvatiKosaricu(baza, korisnikId) {
-  return await baza.collection("kosarica").findOne({ Korisnik_ID: korisnikId });
+  const kosariceKolekcija = baza.collection("kosarica");
+  return await kosariceKolekcija.findOne({ Korisnik_ID: korisnikId });
 }
 
 module.exports = KorisniciDAO;

@@ -34,7 +34,7 @@ export const loaderNarudzbe = async () => {
     });
 
     const podaci = await odgovor.json();
-    console.log(podaci);
+    console.log(podaci)
     if (!odgovor.ok) {
       throw new Error(podaci.error);
     }

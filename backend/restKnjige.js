@@ -1,13 +1,11 @@
 const KnjigeDAO = require("./DAO/knjigeDAO");
 const kljuc = process.env.STRIPE;
-const endpointSecret = process.env.WEBHOOKS
+const endpointSecret = process.env.WEBHOOKS;
 const stripe = require("stripe")(kljuc);
 const konfiguracija = require("./konfiguracija.json");
 const appPort = konfiguracija.appPort;
 
-
 exports.knjige = async function (zahtjev, odgovor) {
-  
   const kdao = new KnjigeDAO();
 
   try {
@@ -21,14 +19,13 @@ exports.knjige = async function (zahtjev, odgovor) {
   } catch (serverError) {
     odgovor.status(500).json({ error: serverError });
   }
-
-
 };
 
 exports.narudzbe = async function (zahtjev, odgovor) {
-  const korisnik = zahtjev.korisnik;
+  
 
   if (zahtjev.method === "GET") {
+    const korisnik = zahtjev.korisnik;
     const kdao = new KnjigeDAO();
     kdao.dohvatiNarudzbe(korisnik).then((poruka) => {
       if (poruka.error) {
@@ -40,7 +37,7 @@ exports.narudzbe = async function (zahtjev, odgovor) {
   }
 
   if (zahtjev.method === "POST") {
-
+    const korisnik = zahtjev.korisnik;
     const narudzba = zahtjev.body.narudzba;
 
     const customer = await stripe.customers.create({
@@ -50,41 +47,39 @@ exports.narudzbe = async function (zahtjev, odgovor) {
       },
     });
 
-    const line_items = await Promise.all(narudzba.map(async (knjiga) => {
-      const price = knjiga.cijena * 100;
-      const item = {
-        price_data: {
-          currency: "usd",
-          product_data: {
-            name: knjiga.naslov,
-            images: [knjiga.slika],
-            metadata: {
-              id: knjiga.isbn.toString(),
+    const line_items = await Promise.all(
+      narudzba.map(async (knjiga) => {
+        const price = knjiga.cijena * 100;
+        const item = {
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: knjiga.naslov,
+              images: [knjiga.slika],
+              metadata: {
+                id: knjiga.isbn.toString(),
+              },
             },
+            unit_amount: price,
           },
-          unit_amount: price,
-        },
-        quantity: knjiga.kolicina,
-      };
-      return item;
-    }));
-    
+          quantity: knjiga.kolicina,
+        };
+        return item;
+      })
+    );
+
     const session = await kreiranjeStripeSesije(line_items, customer);
 
     odgovor.status(303).send({ url: session.url });
-
   }
 };
 
 exports.webhooks = async (zahtjev, odgovor) => {
-
-  narudzba = zahtjev.body.data.object;
-  eventType = zahtjev.body.type;
+  const narudzba = zahtjev.body.data.object;
+  const eventType = zahtjev.body.type;
 
   if (eventType === "payment_intent.succeeded") {
-
     const kupac = await stripe.customers.retrieve(narudzba.customer);
-    
     try {
       const kdao = new KnjigeDAO();
       kdao.kreirajNarudzbu(narudzba, kupac).then((poruka) => {
@@ -112,9 +107,7 @@ exports.kosarica = function (zahtjev, odgovor) {
         odgovor.status(200).json({ kosarica: poruka.kosarica });
       }
     });
-  }
-
-  else if (zahtjev.method === "PUT") {
+  } else if (zahtjev.method === "PUT") {
     kdao.azurirajKosaricu(korisnik, zahtjev.body).then((poruka) => {
       if (poruka.error) {
         odgovor.status(400).json({ error: poruka.error });
@@ -122,8 +115,7 @@ exports.kosarica = function (zahtjev, odgovor) {
         odgovor.status(200).json({ kosarica: poruka.azuriranaKosarica });
       }
     });
-  }
-  else odgovor.status(405).json({ error: "Metoda nije dopuštena!" });
+  } else odgovor.status(405).json({ error: "Metoda nije dopuštena!" });
 };
 
 exports.bazaKnjige = function (zahtjev, odgovor) {};
@@ -183,7 +175,7 @@ kreiranjeStripeSesije = async (line_items, customer) => {
       enabled: true,
     },
     mode: "payment",
-    customer: customer.id
+    customer: customer.id,
   });
   return session;
-}
+};

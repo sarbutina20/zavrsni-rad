@@ -35,7 +35,7 @@ const pripremaPutanja = () => {
 
   app.get("/api/narudzbe", jwt.verificirajToken, restKnjige.narudzbe); 
   app.post("/api/narudzbe", jwt.verificirajToken, restKnjige.narudzbe);
-  app.post("/api/stripe/webhook",express.raw({ type: "application/json" }),restKnjige.webhooks);
+  app.post("/api/stripe/webhooks",express.raw({ type: "application/json" }),restKnjige.webhooks);
 
   app.get("/api/kosarica", jwt.verificirajToken, restKnjige.kosarica);
   app.put("/api/kosarica", jwt.verificirajToken, restKnjige.kosarica);

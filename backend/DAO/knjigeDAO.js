@@ -29,18 +29,16 @@ class KnjigeDAO {
     const db = await this.baza.poveziSeNaBazu();
     const baza = db.database;
     const kolekcijaNarudzbi = baza.collection("narudzbe");
-
+    console.log(narudzba)
     const trenutniDatum = new Date();
 
     const proizvodi = JSON.parse(kupac.metadata.kosarica);
-    const ukupnaCijenaStavki = narudzba.amount_total / 100;
+    const ukupnaCijenaStavki = narudzba.amount / 100;
     const stavke = proizvodi.map((knjiga) => {
       return {
         isbn: knjiga.isbn,
         kolicina: knjiga.kolicina,
-        autor: knjiga.autor,
         naslov: knjiga.naslov,
-        ukupnaCijena: knjiga.ukupnaCijena,
         cijena: knjiga.cijena,
       };
     });
@@ -50,12 +48,13 @@ class KnjigeDAO {
       datum: trenutniDatum.toISOString(),
       Korisnik_ID: new ObjectId(kupac.metadata.Korisnik_ID),
       ukupnaCijenaStavki: ukupnaCijenaStavki,
-      adresa: narudzba.shipping_details.address,
-      kontakt: narudzba.customer_details,
+      adresa: narudzba.shipping.address,
+      kontakt: {email: kupac.email, telefon: kupac.phone}
     };
 
     try {
       const povratneInfo = await kolekcijaNarudzbi.insertOne(novaNarudzba);
+      
       db.prekiniVezu();
       return povratneInfo;
     } catch (error) {
