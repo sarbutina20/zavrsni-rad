@@ -50,7 +50,7 @@ const Knjiga = ({ knjiga }) => {
       <div onClick={detaljiHandler}>
         <h3>{knjiga.naslov}</h3>
         <h5>{knjiga.autor}</h5>
-        <img src={knjiga.slika} alt={knjiga.naslov}></img>
+        <img src={knjiga.slika} alt={knjiga.naslov} className={styles.slikaKnjige}></img>
         <br></br>
         <h3>${knjiga.cijena}</h3>
       </div>

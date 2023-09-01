@@ -7,9 +7,9 @@ const appPort = konfiguracija.appPort;
 
 exports.knjige = async function (zahtjev, odgovor) {
   const kdao = new KnjigeDAO();
-
+  const lista = zahtjev.query.lista;
   try {
-    kdao.knjige_NYT().then((poruka) => {
+    kdao.knjige_NYT(lista).then((poruka) => {
       if (poruka.error) {
         odgovor.status(400).json({ error: poruka.error });
       } else {

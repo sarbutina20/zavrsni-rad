@@ -29,7 +29,7 @@ class KnjigeDAO {
     const db = await this.baza.poveziSeNaBazu();
     const baza = db.database;
     const kolekcijaNarudzbi = baza.collection("narudzbe");
-    console.log(narudzba)
+
     const trenutniDatum = new Date();
 
     const proizvodi = JSON.parse(kupac.metadata.kosarica);
@@ -49,12 +49,12 @@ class KnjigeDAO {
       Korisnik_ID: new ObjectId(kupac.metadata.Korisnik_ID),
       ukupnaCijenaStavki: ukupnaCijenaStavki,
       adresa: narudzba.shipping.address,
-      kontakt: {email: kupac.email, telefon: kupac.phone}
+      kontakt: { email: kupac.email, telefon: kupac.phone },
     };
 
     try {
       const povratneInfo = await kolekcijaNarudzbi.insertOne(novaNarudzba);
-      
+
       db.prekiniVezu();
       return povratneInfo;
     } catch (error) {
@@ -63,10 +63,10 @@ class KnjigeDAO {
     }
   }
 
-  async knjige_NYT() {
+  async knjige_NYT(lista) {
     try {
       const odgovor = await fetch(
-        `https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json?api-key=${kljuc}`
+        `https://api.nytimes.com/svc/books/v3/lists/current/${lista}.json?api-key=${kljuc}`
       );
 
       if (!odgovor.ok) {
