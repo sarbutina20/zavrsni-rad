@@ -55,6 +55,10 @@ export const kreirajRouter = () => {
               loader: loaderNarudzbe
             },
             {
+              path: "mojeNarudzbe",
+              element: <MojeNarudzbe></MojeNarudzbe>,
+            },
+            {
               path: "uspjesnaTransakcija",
               element: <UspjesnaTransakcija></UspjesnaTransakcija>
             }
